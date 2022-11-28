@@ -3,7 +3,7 @@ name: "Terraform Format"
 on:
   push:
     branches:
-      - main
+      - '**'
 
 permissions: 
   statuses: write
@@ -31,3 +31,4 @@ jobs:
         with:
           status: "${{ job.status }}"
 
+#test
