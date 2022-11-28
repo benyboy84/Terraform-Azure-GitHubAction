@@ -22,4 +22,4 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: .github/actions/terraform-fmt
+        uses: ./.github/actions/terraform-fmt
