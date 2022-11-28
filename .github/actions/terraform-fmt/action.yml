@@ -6,6 +6,6 @@ runs:
   using: "composite"
   steps:
     - name: Terraform Format
-        #id: fmt
-        run: terraform fmt -check -recursive<
-        shell: bash
+      id: fmt
+      run: terraform fmt -check -recursive
+      shell: bash
