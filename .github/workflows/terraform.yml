@@ -20,4 +20,4 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
-        uses: /.github/workflows/actions/terraform-fmt
+        uses: ./.github/actions/terraform-fmt
