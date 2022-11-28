@@ -3,6 +3,8 @@ description: Rewrite terraform files into canonical format
 author: Benoit Blais
 
 runs:
+  using: "composite"
+    steps:
     - name: Terraform Format
         id: fmt
         run: terraform fmt -check -recursive
