@@ -4,7 +4,8 @@ author: Benoit Blais
 
 runs:
   using: "composite"
-    steps:
+  steps:
     - name: Terraform Format
         id: fmt
-        run: terraform fmt -check -recursive
+        run: terraform fmt -check -recursive<
+        shell: bash

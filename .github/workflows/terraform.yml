@@ -21,4 +21,4 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        run: terraform fmt -check
+        uses: ./github/actions/terraform-fmt
