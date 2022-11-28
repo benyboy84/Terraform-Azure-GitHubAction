@@ -25,7 +25,7 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: ./.github/actions/terraform-fmt
+        uses: benyboy84/GitHubAction_terraform-fmt@v1
 
       - uses: ouzi-dev/commit-status-updater@v2
         with:
