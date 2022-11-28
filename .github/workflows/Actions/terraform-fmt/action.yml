@@ -1,0 +1,8 @@
+name: terraform-fmt
+description: Rewrite terraform files into canonical format
+author: Benoit Blais
+
+runs:
+    - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check -recursive
