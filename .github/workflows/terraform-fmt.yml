@@ -29,5 +29,5 @@ jobs:
 
       - uses: ouzi-dev/commit-status-updater@v2
         with:
-          status: "${{ job.id }}-${{ job.status }}"
+          status: "Terraform Format-${{ job.status }}"
 
