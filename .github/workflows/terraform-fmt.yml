@@ -19,10 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ouzi-dev/commit-status-updater@v2
-        with:
-          name: "release"
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -32,10 +28,3 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
-
-      - uses: ouzi-dev/commit-status-updater@v2
-        with:
-          status: "${{ job.status }}"
-          name: "name of my status check"
-
-#test Validate
