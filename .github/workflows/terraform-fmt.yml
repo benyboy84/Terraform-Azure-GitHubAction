@@ -19,6 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - uses: ouzi-dev/commit-status-updater@v2
+        with:
+          name: "release"
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
