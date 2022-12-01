@@ -29,7 +29,7 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
+        uses: https://github.com/benyboy84/GitHubAction_terraform-validate@v1.0.0
 
       - uses: ouzi-dev/commit-status-updater@v2
         with:
