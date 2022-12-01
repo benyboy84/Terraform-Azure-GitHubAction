@@ -28,3 +28,6 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
+        with:
+          command: terraform fmt -check -recursive
+          commit_message: "Terraform Format Validation"
