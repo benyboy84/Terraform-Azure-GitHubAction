@@ -1,4 +1,4 @@
-name: "TFLint"
+name: "GitGub Workflow - TFLint"
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   statuses: write
 
 jobs:
-  terraform:
+  tflint:
     name: "TFLint"
     runs-on: ubuntu-latest
     env:
