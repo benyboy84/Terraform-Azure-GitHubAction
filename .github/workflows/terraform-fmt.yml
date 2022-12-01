@@ -30,5 +30,6 @@ jobs:
       - uses: ouzi-dev/commit-status-updater@v2
         with:
           status: "${{ job.status }}"
+          name: "name of my status check"
 
 #test
