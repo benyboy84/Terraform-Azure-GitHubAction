@@ -1,9 +1,8 @@
-name: "GitHub Workflow"
+name: "Terraform Format"
 
 on:
-  pull_request_target:
-    branches:
-      - main
+  pull_request:
+
 
 permissions: 
   contents: read
