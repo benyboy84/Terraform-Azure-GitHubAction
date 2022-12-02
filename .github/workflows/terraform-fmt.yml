@@ -2,8 +2,8 @@ name: "GitHub Workflow"
 
 on:
   pull_request:
-  branches:
-      - main
+    branches:
+
 
 permissions: 
   statuses: write
