@@ -1,7 +1,6 @@
 name: "Terraform Format"
 
 on:
-  pull_request:
   pull_request_target:
     branches:
       - main
@@ -36,16 +35,14 @@ jobs:
 
 
       - uses: actions/github-script@v6
-        #if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request_target'
         env:
           PLAN: "terraform\n${{ steps.fmt.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.output.fmtExitCode }}\`
+            #### Terraform Format and Style ⚙️\`${{ steps.fmt.output. fmtOutput }}\`
 
             <details><summary>Show Plan</summary>
 
