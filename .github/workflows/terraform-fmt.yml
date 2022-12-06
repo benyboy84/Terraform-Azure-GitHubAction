@@ -38,7 +38,7 @@ jobs:
 
       - name: Terraform Format
         id: fmtlocal
-        run: bash main.sh
+        run: bash ./github/workflows/main.sh
         continue-on-error: true
 
       - id: step1
