@@ -52,7 +52,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
-            `#### Terraform action bash 🖌\`${{ steps.BashScript.outputs.fmtExitCode }}\`
+            #### Terraform action bash 🖌\`${{ steps.BashScript.outputs.fmtExitCode }}\`
             #### Terraform fmt local ⚙️\`${{ steps.fmtlocal.outputs.fmtOutput }}\`
             #### Terraform steps ⚙️\`${{ steps.step1.outputs.test }}\`
 
