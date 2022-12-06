@@ -15,11 +15,6 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    outputs:
-      output1: ${{ steps.fmt.outputs.fmtExitCode }}
-      output2: ${{ steps.fmt.outputs.fmtOutput }}
-      #output3: ${{ steps.step1.outputs.test }}
-
     steps:
 
       - name: Checkout
@@ -52,6 +47,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
+            #### Terraform fmt action exit code 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
             #### Terraform action bash 🖌\`${{ steps.BashScript.outputs.fmtExitCode }}\`
             #### Terraform fmt local ⚙️\`${{ steps.fmtlocal.outputs.fmtOutput }}\`
             #### Terraform steps ⚙️\`${{ steps.step1.outputs.test }}\`
