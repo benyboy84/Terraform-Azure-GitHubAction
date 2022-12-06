@@ -40,7 +40,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
-            #### Terraform Format and Style ⚙️\`${{ steps.fmt.outputs. fmtOutput }}\`
+            #### Terraform Format and Style ⚙️\`${{ steps.fmt.outputs.fmtOutput }}\`
 
             <details><summary>Show Plan</summary>
 
