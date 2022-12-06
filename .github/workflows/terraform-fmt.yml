@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    outputs:
+      output1: ${{ steps.fmt.outputs.fmtExitCode }}
+      output2: ${{ steps.fmt.outputs.fmtOutput }}
+      output2: ${{ steps.step1.outputs.test }}
+
     steps:
 
       - name: Checkout
@@ -32,6 +38,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
+      - id: step1
+        run: echo "test=hello" >> $GITHUB_OUTPUT
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -42,6 +50,7 @@ jobs:
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
             #### Terraform Format and Style ⚙️\`${{ steps.fmt.outputs.fmtOutput }}\`
+            #### Terraform steps ⚙️\`${{ steps.step1.outputs.test }}\`
 
             <details><summary>Show Plan</summary>
 
