@@ -34,8 +34,11 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Terraform Format
+        id: fmtlocal
+        run: bash ./main.sh
         continue-on-error: true
 
       - id: step1
@@ -48,8 +51,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
-            #### Terraform Format and Style ⚙️\`${{ steps.fmt.BashScript.fmtOutput }}\`
+            const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
+            const output = `#### Terraform action bash 🖌\`${{ steps.BashScript.outputs.fmtExitCode }}\`
+            #### Terraform fmt local ⚙️\`${{ steps.fmtlocal.outputs.fmtOutput }}\`
             #### Terraform steps ⚙️\`${{ steps.step1.outputs.test }}\`
 
             <details><summary>Show Plan</summary>
