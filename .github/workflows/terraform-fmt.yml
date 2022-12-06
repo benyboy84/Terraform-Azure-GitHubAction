@@ -18,7 +18,7 @@ jobs:
     outputs:
       output1: ${{ steps.fmt.outputs.fmtExitCode }}
       output2: ${{ steps.fmt.outputs.fmtOutput }}
-      output3: ${{ steps.step1.outputs.test }}
+      #output3: ${{ steps.step1.outputs.test }}
 
     steps:
 
