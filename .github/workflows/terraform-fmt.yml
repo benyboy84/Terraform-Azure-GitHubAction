@@ -39,6 +39,9 @@ jobs:
           exitcode: ${{ steps.fmt.outputs.ExitCode }}
         continue-on-error: true
 
+      - run: echo ${{ steps.fmt.outputs.output }}
+      - run: echo ${{ steps.fmt.outputs.ExitCode }}
+
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
