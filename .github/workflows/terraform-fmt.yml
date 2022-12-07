@@ -46,11 +46,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
-            #### Terraform fmt action exit code 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
-            #### Terraform action bash 🖌\`${{ steps.BashScript.outputs.fmtExitCode }}\`
-            #### Terraform fmt local ⚙️\`${{ steps.fmtlocal.outputs.fmtOutput }}\`
-            #### Terraform steps ⚙️\`${{ steps.step1.outputs.test }}\`
+            const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
+            #### Terraform fmt action exit code 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
+            #### Terraform action bash 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
+            #### Terraform fmt local ⚙️\`${{ steps.fmt.outputs.Output }}\`
+            
 
             <details><summary>Show Plan</summary>
 
