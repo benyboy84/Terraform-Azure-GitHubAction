@@ -35,8 +35,9 @@ jobs:
         uses:  benyboy84/GitHubAction_terraform_PrComment@v1.0.0
         with:
           type: fmt
-          input: ${{ steps.fmt.outputs.output }}
+          input: ${{ steps.fmt.outputs.fmtoutput }}
           exitcode: ${{ steps.fmt.outputs.fmtExitCode }}
+        continue-on-error: true
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
