@@ -32,7 +32,7 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Format Comment PR
-        uses:  benyboy84/GitHubAction_terraform_PrComment@v1
+        uses:  benyboy84/GitHubAction_terraform_PrComment@v1.0.0
         with:
           type: fmt
           input: ${{ steps.fmt.outputs.output }}
