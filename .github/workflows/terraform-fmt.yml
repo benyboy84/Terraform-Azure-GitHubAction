@@ -31,14 +31,6 @@ jobs:
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
         continue-on-error: true
 
-      - name: Terraform Format
-        id: fmtlocal
-        run: bash ./github/workflows/main.sh
-        continue-on-error: true
-
-      - id: step1
-        run: echo "test=hello" >> $GITHUB_OUTPUT
-
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
