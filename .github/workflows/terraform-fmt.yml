@@ -35,8 +35,8 @@ jobs:
         uses:  benyboy84/GitHubAction_terraform_PrComment@v1.0.0
         with:
           type: fmt
-          input: ${{ steps.fmt.outputs.fmtoutput }}
-          exitcode: ${{ steps.fmt.outputs.fmtExitCode }}
+          input: ${{ steps.fmt.outputs.output }}
+          exitcode: ${{ steps.fmt.outputs.ExitCode }}
         continue-on-error: true
 
       - uses: actions/github-script@v6
