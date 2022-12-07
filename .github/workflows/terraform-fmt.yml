@@ -31,6 +31,13 @@ jobs:
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
         continue-on-error: true
 
+      - name: Terraform Format Comment PR
+        uses:  benyboy84/GitHubAction_terraform_PrComment@v1
+        with:
+          type: fmt
+          input: ${{ steps.fmt.outputs.output }}
+          exitcode: ${{ steps.fmt.outputs.fmtExitCode }}
+
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
