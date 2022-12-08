@@ -35,8 +35,8 @@ jobs:
         uses:  benyboy84/GitHubAction_terraform_PrComment@v1.0.0
         with:
           type: fmt
-          input: ${{ steps.fmt.outputs.output }}
-          exitcode: ${{ steps.fmt.outputs.ExitCode }}
+          input: ${{ steps.fmt.outputs.fmtOutput }}
+          exitcode: ${{ steps.fmt.outputs.fmtExitCode }}
         continue-on-error: true
 
       - uses: actions/github-script@v6
@@ -46,10 +46,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
-            #### Terraform fmt action exit code 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
-            #### Terraform action bash 🖌\`${{ steps.fmt.outputs.ExitCode }}\`
-            #### Terraform fmt local ⚙️\`${{ steps.fmt.outputs.Output }}\`
+            const output = `#### Terraform action 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
+            #### Terraform fmt action exit code 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
+            #### Terraform action bash 🖌\`${{ steps.fmt.outputs.fmtExitCode }}\`
+            #### Terraform fmt local ⚙️\`${{ steps.fmt.outputs.fmtOutput }}\`
             
 
             <details><summary>Show Plan</summary>
