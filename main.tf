@@ -3,7 +3,7 @@
 #############################################################################
 
 terraform {
-  required_providers {
+required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 2.0"
@@ -16,35 +16,6 @@ terraform {
       name = "Azure"
     }
   }
-}
-
-#############################################################################
-# VARIABLES
-#############################################################################
-
-variable "resource_group_name" {
-  type = string
-}
-
-variable "location" {
-  type    = string
-  default = "eastus"
-}
-
-
-variable "vnet_cidr_range" {
-  type    = string
-  default = "10.0.0.0/16"
-}
-
-variable "subnet_prefixes" {
-  type    = list(string)
-  default = ["10.0.0.0/24", "10.0.1.0/24"]
-}
-
-variable "subnet_names" {
-  type    = list(string)
-  default = ["web", "database"]
 }
 
 #############################################################################
