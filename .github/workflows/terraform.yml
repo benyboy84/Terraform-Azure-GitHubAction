@@ -38,6 +38,7 @@ jobs:
         uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
         with:
           Github_Token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
 
       - name: Create file
         id: createfile
