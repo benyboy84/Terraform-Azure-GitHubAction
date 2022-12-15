@@ -59,4 +59,7 @@ jobs:
       
       - name: terraform apply
         id: apply
-        run: terraform apply -auto-approve -input=false "terraform.tfplan"
+        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
+        with:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          Plan: terraform.tfplan
