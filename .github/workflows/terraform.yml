@@ -44,9 +44,13 @@ jobs:
         id: createfile
         run: |
           echo -e "$${{ steps.plan.Outputs.Plan }}"
-          echo -e "$${{ steps.plan.Outputs.Plan }}" > artifact.txt
+          echo -e "$${{ steps.plan.Outputs.Plan }}" > plan.tfplan
 
       - uses: actions/upload-artifact@v3
         with:
           name: my-artifact1
-          path: artifact.txt
+          path: plan.tfplan
+      
+      - name: terraform apply
+        id: apply
+        run: terraform apply -auto-approve -input=false "plan.tfplan"
