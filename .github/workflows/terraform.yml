@@ -42,7 +42,9 @@ jobs:
 
       - name: Create file
         id: createfile
-        run: echo $${{ steps.plan.Outputs.Plan }} > artifact.txt
+        run: |
+        echo $${{ steps.plan.Outputs.Plan }}
+        echo $${{ steps.plan.Outputs.Plan }} > artifact.txt
 
       - uses: actions/upload-artifact@v3
         with:
