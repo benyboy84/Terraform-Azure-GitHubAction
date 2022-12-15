@@ -7,6 +7,11 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
     steps:
 
@@ -38,19 +43,13 @@ jobs:
         uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
         with:
           Github_Token: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-
-      - name: Create file
-        id: createfile
-        run: |
-          echo -e "$${{ steps.plan.Outputs.Plan }}"
-          echo -e "$${{ steps.plan.Outputs.Plan }}" > plan.tfplan
+          Out: terraform.tfplan
 
       - uses: actions/upload-artifact@v3
         with:
-          name: my-artifact1
-          path: plan.tfplan
+          name: terraform.tfplan
+          path: terraform.tfplan
       
       - name: terraform apply
         id: apply
-        run: terraform apply -auto-approve -input=false "plan.tfplan"
+        run: terraform apply -auto-approve -input=false "terraform.tfplan"
