@@ -44,9 +44,15 @@ jobs:
         id: createfile
         run: |
           echo $${{ steps.plan.Outputs.Plan }}
+          echo $${{ steps.plan.Outputs.fichier }}
           echo $${{ steps.plan.Outputs.Plan }} > artifact.txt
 
       - uses: actions/upload-artifact@v3
         with:
           name: my-artifact1
           path: artifact.txt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: tfplan
