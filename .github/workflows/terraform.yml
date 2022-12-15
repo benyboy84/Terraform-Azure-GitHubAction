@@ -39,7 +39,7 @@ jobs:
         shell: bash
 
       - name: Terraform Validate
-        id: fmt
+        id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
         with:
           Github_Token: ${{ secrets.GITHUB_TOKEN }}
