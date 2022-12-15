@@ -38,6 +38,13 @@ jobs:
         run: terraform init
         shell: bash
 
+      - name: Terraform Validate
+        id: fmt
+        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
+        with:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          Comment: true
+
       - name: Terraform Plan
         id: plan
         uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
