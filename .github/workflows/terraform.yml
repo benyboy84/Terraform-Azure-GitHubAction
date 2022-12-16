@@ -29,6 +29,10 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
+        with:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          Recursive: true
+          Comment: true
 
 #      - name: Terraform Init
 #        id: init
@@ -38,9 +42,6 @@ jobs:
       - name: Terraform Validate
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Comment: true
 
 #      - name: Terraform Plan
 #        id: plan
