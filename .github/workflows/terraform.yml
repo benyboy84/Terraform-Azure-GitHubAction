@@ -55,9 +55,9 @@ jobs:
 #          name: terraform.tfplan
 #          path: terraform.tfplan
       
-      - name: terraform apply
-        id: apply
-        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Plan: terraform.tfplan
+#      - name: terraform apply
+#        id: apply
+#        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
+#        with:
+#          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+#          Plan: terraform.tfplan
