@@ -35,3 +35,4 @@ jobs:
         with:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
+          URL: ${{ github.event.issue.pull_request }}

@@ -26,29 +26,30 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: false
 
-      - name: Terraform Format
-        id: fmt
-        uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Recursive: true
-          Comment: true
-
-#      - name: Terraform Init
-#        id: init
-#        run: terraform init
-#        shell: bash
-
-      - name: Terraform Validate
-        id: validate
-        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
-
-#      - name: Terraform Plan
-#        id: plan
-#        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
+#      - name: Terraform Format
+#        id: fmt
+#        uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
 #        with:
 #          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-#          Out: terraform.tfplan
+#          Recursive: true
+#          Comment: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        shell: bash
+
+#      - name: Terraform Validate
+#        id: validate
+#        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
+
+      - name: Terraform Plan
+        id: plan
+        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
+        with:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          Out: terraform.tfplan
+          URL: ${{ github.event.issue.pull_request }}
 
 #      - uses: actions/upload-artifact@v3
 #        with:
