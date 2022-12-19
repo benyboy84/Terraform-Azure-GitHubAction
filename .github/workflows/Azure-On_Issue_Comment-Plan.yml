@@ -1,0 +1,37 @@
+name: Terraform Plan
+
+on:
+  issue_comment:
+    types: created
+
+jobs:
+  terraform-plan:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'terraform plan') }}
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }} 
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        
+      - name: Terraform Plan
+        id: plan
+        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
+        with:
+          GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
+          Out: terraform.tfplan
