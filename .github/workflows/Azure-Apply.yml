@@ -98,8 +98,8 @@ jobs:
 
   terraform-plan:
     name: Terraform Plan
-#    if: always()
-    if: ${{ github.event_name == 'pull_request' || ( github.event.issue.pull_request && ( contains(github.event.comment.body, 'terraform plan') ) ) }}
+    if: always()
+#    if: ${{ github.event_name == 'pull_request' || ( github.event.issue.pull_request && ( contains(github.event.comment.body, 'terraform plan') ) ) }}
     runs-on: ubuntu-latest
     needs: [terraform-fmt, terraform-validate]
     env:
@@ -109,9 +109,9 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
     steps:
 
-#      - name: Validate Needs
-#        if: ${{ needs.terraform-fmt.result == 'failure' || needs.terraform-validate.result == 'failure' }}
-#        run: exit 1
+      - name: Validate Needs
+        if: ${{ ( github.event_name != 'issue_comment' || github.event_name != 'pull_request' ) && ( needs.terraform-fmt.result == 'failure' || needs.terraform-validate.result == 'failure' ) }}
+        run: exit 1
       
       - name: Checkout
         uses: actions/checkout@v3
@@ -137,7 +137,6 @@ jobs:
     name: "Pull Request Review"
     if: ${{ github.event.review.state == 'approved' }}
     runs-on: ubuntu-latest
-    needs: terraform-plan
     steps:
       - run: echo "Approved"
 
