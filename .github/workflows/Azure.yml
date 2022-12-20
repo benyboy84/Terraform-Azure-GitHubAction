@@ -108,8 +108,8 @@ jobs:
     steps:
 
       - name: Validate Needs
-        if: ${{ needs.*.result == 'success' }}
-        run: echo "Success"
+        if: ${{ needs.terraform-fmt.result != 'success' || needs.terraform-validate.result != 'success' }}
+        run: exit 1
       
       - name: Checkout
         uses: actions/checkout@v3
