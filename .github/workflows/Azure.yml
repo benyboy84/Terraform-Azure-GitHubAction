@@ -27,19 +27,22 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: "Terraform Checks - Push"
+name: "Terraform"
 
 on:
-  push:
+  pull_request:
     branches: 
       - '*'         # matches every branch that doesn't contain a '/'
       - '*/*'       # matches every branch containing a single '/'
       - '**'        # matches every branch
       - '!master'   # excludes master
+  issue_comment:
+    types: created
 
 jobs:
   terraform-fmt:
     name: "Terraform Format"
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,6 +71,7 @@ jobs:
 
   terraform-validate:
     name: "Terraform Validate"
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +79,6 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}       # Can be configured in Terraform Cloud
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
-
     steps:
 
       - name: Checkout
@@ -90,3 +93,35 @@ jobs:
       - name: Terraform Validate
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
+
+  terraform-plan:
+    name: Terraform Plan
+    if: ${{ github.event_name == 'pull_request' || (github.event.issue.pull_request && contains(github.event.comment.body, 'terraform plan')) }}
+    runs-on: ubuntu-latest
+    needs: [terraform-fmt, terraform-validate]
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}               # Can be configured in Terraform Cloud
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}       # Can be configured in Terraform Cloud
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        
+      - name: Terraform Plan
+        id: plan
+        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
+        with:
+          GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
+          Out: terraform.tfplan
