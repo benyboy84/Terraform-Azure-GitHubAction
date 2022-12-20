@@ -109,7 +109,7 @@ jobs:
 
       - name: Validate Needs
         if: ${{ needs.terraform-fmt.result != 'success'  needs.terraform-validate.result != 'success' }}
-        script: | 
+        run: | 
           echo ${{ needs.terraform-fmt.result }}
           echo ${{ needs.terraform-validate.result }}
           exit 1
