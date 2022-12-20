@@ -38,10 +38,12 @@ on:
 jobs:
   review:
     name: "Pull Request Review"
-    if: ${{ github.event.review.state != 'approved' }}
+    #if: ${{ github.event.review.state == 'approved' }}
     runs-on: ubuntu-latest
+    env:
+      INPUT: ${{ github.event.review.state }}
     steps:
-      - run: exit 1
+      - run: exit 0
 
   terraform-apply:
     name: Terraform Apply
