@@ -152,6 +152,10 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
     steps:
 
+      - name: Validate Needs
+        if: ${{ needs.review.result != 'success' }}
+        run: exit 1
+
       - name: Checkout
         uses: actions/checkout@v3
 
