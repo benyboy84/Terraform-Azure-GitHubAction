@@ -136,7 +136,9 @@ jobs:
   review:
     name: "Pull Request Review"
     if: ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' }}
-    run: echo "Approved"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Approved"
 
   terraform-apply:
     name: Terraform Apply
