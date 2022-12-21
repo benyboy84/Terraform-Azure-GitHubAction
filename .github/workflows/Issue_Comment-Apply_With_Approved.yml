@@ -59,7 +59,7 @@ jobs:
           PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L "$URL" | jq '.[] | select((.user.login|test ("github-actions")) and (.body|test ("Approved"))) | .id')
           echo "$PR_COMMENT_ID"
           echo $URL
-          if [ "PR_COMMENT_ID" ]; then
+          if [ -n "PR_COMMENT_ID" ]; then
             echo "Pull Request Approved"
             exit 0
           else
