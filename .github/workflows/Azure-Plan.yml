@@ -115,12 +115,13 @@ jobs:
       
       - name: Checkout
         uses: actions/checkout@v3
+          ref: "azure"
 
-      - name: Checkout Pull Request
-        if: ${{ github.event_name == 'issue_comment' }}
-        run: hub pr checkout ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Checkout Pull Request
+#        if: ${{ github.event_name == 'issue_comment' }}
+#        run: hub pr checkout ${{ github.event.issue.number }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
