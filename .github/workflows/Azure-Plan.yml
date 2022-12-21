@@ -133,15 +133,19 @@ jobs:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
 
-      - name: get the one latest&last sha # get the last commit sha in pull_Requst
+      - name: Terraform Plan Success
+        if: ${{ failure() }}
+        # set the merge commit status check
+        # using GitHub REST API
+        # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
         run: |
-          URL=${{ github.event.issue.pull_request.url }}/commits
-          export PRSHA=$(curl -u "weide:${{ secrets.GITHUB_TOKEN }}" -s $URL | jq -r '.[] | .sha' | xargs | awk -F " " '{print $NF}')"
-
-      - name: echo PRSHA # check the lastest SHA
-        run: |
-          echo $PRSHA
-
-      - name: create the status # create the status on the lastest commit sha from pull request
-        run: |
-          curl -X POST -u "weide:${{ secrets.PAT0309 }}" -H "Content-Type: application/json" "https://api.github.com/repos/${{ github.repository }}/statuses/$PRSHA" --data '{ "state": "failure", "target_url": "https://example.com/build/status", "description": "The build failed!", "context": "continuous-integration/statuscreation7"}'
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "Terraform Plan / Terraform Plan (pull_request)",
+            "state": "success",
+            "description": "Successful",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
