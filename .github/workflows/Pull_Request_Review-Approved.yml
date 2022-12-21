@@ -44,13 +44,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      URL: ${{ github.event.issue.comments_url }}
     steps:
 
       - name: Print GitHub context
         run: echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-          URL: ${{ github.event.issue.comments_url }}
 
       - name: Add Pull Request Comment
         id: init
