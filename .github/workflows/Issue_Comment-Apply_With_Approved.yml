@@ -1,0 +1,98 @@
+# This workflow installs the latest version of Terraform CLI and configures the Terraform CLI configuration file
+# with an API token for Terraform Cloud (app.terraform.io) - if required. On issue comment, if the comment is `terraform apply`,
+# this workflow will use the GitHub Action `GitHubAction_terraform-plan` to run `terraform plan` (speculative plan via Terraform Cloud) 
+# and use the the GitHub Action `GitHubAction_terraform-apply` and run `terraform apply`.
+#   Documentation
+#     - https://github.com/benyboy84/GitHubAction_terraform-plan
+#     - https://github.com/benyboy84/GitHubAction_terraform-apply
+#
+# Prerequisites:
+# - An Azure account and Azure Access Credentials
+#
+# Opional:
+# - A Terraform Cloud account
+#
+# "API-driven workflow" Workspace.
+# Environment Variables for your workspace with their respective values.
+# - ARM_CLIENT_ID
+# - ARM_CLIENT_SECRET
+# - ARM_SUBSCRIPTION_ID
+# - ARM_TENANT_ID
+#
+# Terraform Cloud user API token stored as a GitHub secret (e.g. TF_API_TOKEN) in the repository.
+#   Documentation:
+#     - https://www.terraform.io/docs/cloud/users-teams-organizations/api-tokens.html
+#     - https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
+#
+# GitHub secret in step `Setup Terraform`.
+#   Example:
+#     - name: Setup Terraform
+#       uses: hashicorp/setup-terraform@v1
+#       with:
+#         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+name: Terraform Apply - Issue_Comment
+
+on:
+  issue_comment:
+    types: created
+
+jobs:
+  terraform-apply:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'terraform apply') }}
+    name: Terraform Apply - Comment
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}               # Can be configured in Terraform Cloud
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}       # Can be configured in Terraform Cloud
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
+    steps:
+
+      - name: Validate Approval
+        env:
+          URL: ${{ github.event.issue.comments_url }}
+        run: |
+          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+          PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L "$URL" | jq '.[] | select((.user.login|test ("github-actions")) and (.body|test ("Approved"))) | .id')
+          if [ "PR_COMMENT_ID" ]; then
+            echo "Pull Request Approved"
+            exit 0
+          else
+            echo "Pull Request NOT approved"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checkout Pull Request
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        
+      - name: Terraform Plan
+        id: plan
+        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
+        with:
+          GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
+          Out: terraform.tfplan
+
+      - name: Terraform Apply
+        id: apply
+        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
+        with:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          Plan: terraform.tfplan
