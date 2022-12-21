@@ -134,7 +134,7 @@ jobs:
           Out: terraform.tfplan
 
       - name: Terraform Plan Success
-        if: ${{ failure() }}
+        if: ${{ success() }}
         # set the merge commit status check
         # using GitHub REST API
         # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
