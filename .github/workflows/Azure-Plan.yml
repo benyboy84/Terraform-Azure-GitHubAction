@@ -132,3 +132,16 @@ jobs:
         with:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
+
+      - name: get the one latest&last sha # get the last commit sha in pull_Requst
+        run: |
+          URL=${{ github.event.issue.pull_request.url }}/commits
+          echo "::set-env name=PRSHA::$(curl -u "weide:${{ secrets.GITHUB_TOKEN }}" -s $URL | jq -r '.[] | .sha' | xargs | awk -F " " '{print $NF}')"
+
+      - name: echo PRSHA # check the lastest SHA
+        run: |
+          echo $PRSHA
+
+      - name: create the status # create the status on the lastest commit sha from pull request
+        run: |
+          curl -X POST -u "weide:${{ secrets.PAT0309 }}" -H "Content-Type: application/json" "https://api.github.com/repos/${{ github.repository }}/statuses/$PRSHA" --data '{ "state": "failure", "target_url": "https://example.com/build/status", "description": "The build failed!", "context": "continuous-integration/statuscreation7"}'
