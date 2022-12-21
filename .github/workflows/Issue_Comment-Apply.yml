@@ -38,7 +38,6 @@ on:
     types: created
 
 jobs:
-
   terraform-apply:
     if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'terraform apply') }}
     name: Terraform Apply - Comment
