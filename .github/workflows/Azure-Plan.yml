@@ -115,7 +115,7 @@ jobs:
       
       - name: Checkout
         uses: actions/checkout@v3
-          ref: "azure"
+          ref: azure
 
 #      - name: Checkout Pull Request
 #        if: ${{ github.event_name == 'issue_comment' }}
