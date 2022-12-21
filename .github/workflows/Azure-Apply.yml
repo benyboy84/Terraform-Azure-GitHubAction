@@ -79,16 +79,6 @@ jobs:
         run: echo "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_commit.id }}""
 
 
-        # Look for an existing validate PR comment and delete.
-        echo "Terraform Validate | INFO     | Looking for an existing validate PR comment."
-        ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
-        AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-        CONTENT_HEADER="Content-Type: application/json"
-        if [[ "$GITHUB_EVENT_NAME" == "issue_comment" ]]; then
-            PR_COMMENTS_URL=$(jq -r ".issue.comments_url" "$GITHUB_EVENT_PATH")
-        else
-            PR_COMMENTS_URL=$(jq -r ".pull_request.comments_url" "$GITHUB_EVENT_PATH")
-        fi
 
 #      - name: Setup Terraform
 #        uses: hashicorp/setup-terraform@v2
