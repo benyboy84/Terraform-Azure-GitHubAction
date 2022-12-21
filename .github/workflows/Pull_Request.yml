@@ -44,7 +44,7 @@ on:
       - '!master'   # excludes master
 
 jobs:
- terraform-fmt:
+  terraform-fmt:
     name: "Terraform Format"
     runs-on: ubuntu-latest
     steps:
