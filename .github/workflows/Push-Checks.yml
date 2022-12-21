@@ -1,6 +1,10 @@
 # This workflow installs the latest version of Terraform CLI and configures the Terraform CLI configuration file
 # with an API token for Terraform Cloud (app.terraform.io) - if required. On push events on branch other than `main`, 
-# this workflow will run `terraform fmt` and `terraform validate`.
+# this workflow will use the GitHub Action `GitHubAction_terraform-fmt` to run `terraform fmt`, `GitHubAction_terraform-validate` 
+# to run `terraform validate`.
+#   Documentation
+#     - https://github.com/benyboy84/GitHubAction_terraform-fmt
+#     - https://github.com/benyboy84/GitHubAction_terraform-validate
 # 
 # Prerequisites:
 # - An Azure account and Azure Access Credentials
@@ -27,31 +31,20 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: "Terraform Plan"
-run-name: "Terraform Plan"
+name: "Terraform Checks - Push"
 
 on:
-  pull_request:
+  push:
     branches: 
       - '*'         # matches every branch that doesn't contain a '/'
       - '*/*'       # matches every branch containing a single '/'
       - '**'        # matches every branch
       - '!master'   # excludes master
-  issue_comment:
-    types: created
 
 jobs:
-
   terraform-fmt:
     name: "Terraform Format"
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}               # Can be configured in Terraform Cloud
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}       # Can be configured in Terraform Cloud
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
     steps:
 
       - name: Checkout
@@ -73,7 +66,6 @@ jobs:
 
   terraform-validate:
     name: "Terraform Validate"
-    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -94,49 +86,4 @@ jobs:
 
       - name: Terraform Validate
         id: validate
-        uses: benyboy84/GitHubAction_terraform-validate@v1
-
-  terraform-plan:
-    name: Terraform Plan
-#    if: always()
-    if: ${{ github.event_name == 'pull_request' || ( github.event.issue.pull_request && ( contains(github.event.comment.body, 'terraform plan') ) ) }}
-    runs-on: ubuntu-latest
-#    needs: [terraform-fmt, terraform-validate]
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}               # Can be configured in Terraform Cloud
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}       # Can be configured in Terraform Cloud
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
-    steps:
-
-#      - name: Validate Needs
-#        if: ${{ needs.terraform-fmt.result == 'failure' || needs.terraform-validate.result == 'failure' }}
-#        run: exit 1
-      
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: azure
-
-#      - name: Checkout Pull Request
-#        if: ${{ github.event_name == 'issue_comment' }}
-#        run: hub pr checkout ${{ github.event.issue.number }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_wrapper: false
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        
-      - name: Terraform Plan
-        id: plan
-        uses: benyboy84/GitHubAction_terraform-plan@v1.0.0
-        with:
-          GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
-          Out: terraform.tfplan
+        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
