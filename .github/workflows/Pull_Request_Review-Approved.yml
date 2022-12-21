@@ -47,6 +47,11 @@ jobs:
       URL: ${{ github.event.pull_request.comments_url }}
     steps:
 
+      - name: Print GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
       - name: Add Pull Request Comment
         run: |
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
