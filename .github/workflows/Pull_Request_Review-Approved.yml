@@ -47,13 +47,7 @@ jobs:
       URL: ${{ github.event.issue.comments_url }}
     steps:
 
-      - name: Print GitHub context
-        run: echo "$GITHUB_CONTEXT"
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-
       - name: Add Pull Request Comment
-        id: init
         run: |
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
@@ -61,5 +55,5 @@ jobs:
           PR_COMMENT_URI=$(jq -r ".repository.issue_comment_url" "$GITHUB_EVENT_PATH" | sed "s|{/number}||g")
           PR_COMMENT="Approved"
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
-#          curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL"
+#          curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
