@@ -1,10 +1,10 @@
 #############################################################################
-# TERRAFORM CONFIG 34
+# TERRAFORM CONFIG 35
 #############################################################################
 
 terraform {
-required_providers {
-  azurerm = {
+  required_providers {
+    azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 2.0"
     }
