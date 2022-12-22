@@ -37,6 +37,11 @@ on:
   pull_request_review:
     types: [submitted, dismissed]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   approved:
     name: Pull Request Approved
@@ -56,7 +61,6 @@ jobs:
           PR_COMMENT="Approved by $USER"
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
-
 
   dismissed:
     name: Pull Request Dismissed
