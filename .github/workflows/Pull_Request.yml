@@ -95,9 +95,8 @@ jobs:
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1
 
-      - name: Validate Approved
-        run: |
-          
+
+
 
   terraform-plan:
     name: Terraform Plan
