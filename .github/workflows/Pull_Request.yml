@@ -97,7 +97,7 @@ jobs:
 
       - name: Validate Approved
         env:
-          URL: ${{ github.event.pull_request._links.self }}
+          #URL: ${{ github.event.pull_request._links.self }}
           #URL: ${{ github.event.issue.pull_request.url }}
           PR_NUMBER: ${{ github.event.number }}
         run: |
