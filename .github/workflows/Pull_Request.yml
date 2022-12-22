@@ -95,18 +95,18 @@ jobs:
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1
 
-      - name: Validate Approved
-        env:
+#      - name: Validate Approved
+#        env:
           #URL: ${{ github.event.pull_request._links.self }}
           #URL: ${{ github.event.issue.pull_request.url }}
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          echo "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews"
-          URL="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/branches/main/protection"
-          echo $URL
-          JSON=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" $URL )
-          echo $JSON
-          echo toJson(JSON)
+#          PR_NUMBER: ${{ github.event.number }}
+#        run: |
+#          echo "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews"
+#          URL="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/branches/main/protection"
+#          echo $URL
+#          JSON=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" $URL )
+#          echo $JSON
+#          echo toJson(JSON)
   
 
 
