@@ -56,3 +56,21 @@ jobs:
           PR_COMMENT="Approved by $USER"
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
+
+  dismissed:
+    name: Pull Request Dismissed
+    if: ${{ github.event.review.state == 'dismissed' }}
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      URL: ${{ github.event.pull_request.comments_url }}
+    steps:          
+
+      - name: Remove Pull Request Comment
+        run: |
+          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+          CONTENT_HEADER="Content-Type: application/json"
+          PR_COMMENT="Approved by $USER"
+          PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
+          curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
