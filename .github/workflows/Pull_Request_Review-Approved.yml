@@ -70,7 +70,7 @@ jobs:
       - name: Remove Pull Request Comment
         run: |
           echo "INFO     | Looking for an existing PR comment."
-          ACCEPT_HEADER=""Accept: application/vnd.github+json""
+          ACCEPT_HEADER="Accept: application/vnd.github+json"
           AUTH_HEADER="Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
           PR_COMMENT_URI=$(echo ${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
           PR_COMMENT_URI="${{ github.event.repository.comments_url }}" | sed "s|{/number}||g"
