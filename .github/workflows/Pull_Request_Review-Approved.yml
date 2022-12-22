@@ -68,7 +68,7 @@ jobs:
           echo "INFO     | Looking for an existing PR comment."
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
-          PR_COMMENT_URI=$(${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
+          PR_COMMENT_URI=${{ github.event.repository.comments_url }} | sed "s|{/number}||g"
           PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id')
           if [ "$PR_COMMENT_ID" ]; then
               echo "INFO     | Found existing PR comment: $PR_COMMENT_ID. Deleting."
