@@ -70,8 +70,8 @@ jobs:
           AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           PR_COMMENT_URI=$(${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
           PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id')
-          if [ "$Pr_Comment_Id" ]; then
+          if [ "$PR_COMMENT_ID" ]; then
               echo "INFO     | Found existing PR comment: $Pr_Comment_Id. Deleting."
-              Pr_Comment_Url="$Pr_Comment_Uri/$Pr_Comment_Id"
-              curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADERr" -L "$Pr_Comment_Url" 
+              PR_COMMENT_URL="$Pr_Comment_Uri/$Pr_Comment_Id"
+              curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L "$PR_COMMENT_URL" 
           fi
