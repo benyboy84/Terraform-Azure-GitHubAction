@@ -95,6 +95,16 @@ jobs:
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1
 
+      - name: Validate Approved
+        env:
+          URL: ${{ github.event.pull_request._links.self }}
+          #URL: ${{ github.event.issue.pull_request.url }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          echo "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews"
+
+
+  
 
 
 
