@@ -35,7 +35,7 @@ name: Pull Request Approved - Issue_Comment
 
 on:
   pull_request_review:
-    types: submitted
+    types: [submitted, dismissed]
 
 jobs:
   approved:
@@ -56,3 +56,22 @@ jobs:
           PR_COMMENT="Approved by $USER"
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
+
+
+  dismissed:
+    name: Pull Request Dismissed
+    if: ${{ github.event.review.state == 'dismissed' }}
+    runs-on: ubuntu-latest
+    steps:          
+      - name: Remove Pull Request Comment
+        run: |
+          echo "INFO     | Looking for an existing PR comment."
+          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+          AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          PR_COMMENT_URI=${{ github.repository.comments_url }} | sed "s|{/number}||g")
+          PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id')
+          if [ "$Pr_Comment_Id" ]; then
+              echo "INFO     | Found existing PR comment: $Pr_Comment_Id. Deleting."
+              Pr_Comment_Url="$Pr_Comment_Uri/$Pr_Comment_Id"
+              curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADERr" -L "$Pr_Comment_Url" 
+          fi
