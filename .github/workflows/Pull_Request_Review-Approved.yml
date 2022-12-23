@@ -52,7 +52,6 @@ jobs:
       URL: ${{ github.event.pull_request.comments_url }}
       USER: ${{ github.event.review.user.login }}
     steps:
-
       - name: Add Pull Request Comment
         run: |
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
@@ -66,12 +65,14 @@ jobs:
     name: Pull Request Dismissed
     if: ${{ github.event.review.state == 'dismissed' }}
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:          
       - name: Remove Pull Request Comment
         run: |
           echo "INFO     | Looking for an existing PR comment."
           ACCEPT_HEADER="Accept: application/vnd.github+json"
-          AUTH_HEADER="Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
           PR_COMMENT_URI=$(echo ${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
           PR_COMMENT_URI="${{ github.event.repository.comments_url }}" | sed "s|{/number}||g"
           echo -e "$PR_COMMENT_URI"
