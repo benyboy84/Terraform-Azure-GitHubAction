@@ -95,4 +95,4 @@ jobs:
           echo $URL
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-          curl -X PUT -H $ACCEPT_HEADER -H $AUTH_HEADER $URL -d '{"commit_title":"Merge by CICD"}'
+          curl -sS -X PUT -H $ACCEPT_HEADER -H $AUTH_HEADER $URL -d '{"commit_message":"Merge by GitHub Action"}'
