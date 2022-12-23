@@ -68,7 +68,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ steps.branch.putputs.Branch }}
+          ref: ${{ steps.branch.outputs.Branch }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -108,4 +108,4 @@ jobs:
       - name: Delete Branch
         id: delete
         run: |
-          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ steps.branch.putputs.Branch }}
+          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ steps.branch.outputs.Branch }}
