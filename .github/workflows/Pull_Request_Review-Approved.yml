@@ -62,7 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:          
+    steps:     
+
+      - name: Print GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
       - name: Remove Pull Request Comment
         run: |
           echo "INFO     | Looking for an existing PR comment."
