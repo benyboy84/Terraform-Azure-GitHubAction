@@ -69,7 +69,7 @@ jobs:
           echo "INFO     | Looking for an existing PR comment."
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-          PR_COMMENT_URI=$(echo ${{ github.event.head.repo.issue_comment_url }} | sed "s|{/number}||g")
+          PR_COMMENT_URI=$(echo ${{ github.event.pull_request.head.repo.issue_comment_url }} | sed "s|{/number}||g")
           echo $PR_COMMENT_URI
           echo -e "$PR_COMMENT_URI"
           curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id' | while read ID; do
