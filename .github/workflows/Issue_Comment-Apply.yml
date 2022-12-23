@@ -79,9 +79,18 @@ jobs:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
 
-      - name: Terraform Apply
-        id: apply
-        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Plan: terraform.tfplan
+#      - name: Terraform Apply
+#        id: apply
+#        uses: benyboy84/GitHubAction_terraform-apply@v1.0.0
+#        with:
+#          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+#          Plan: terraform.tfplan
+
+      - name: Merge Pull Request
+        id: merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+          curl -X PUT -H $ACCEPT_HEADER -H $AUTH_HEADER https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge -d '{"commit_title":"Merge by CICD"}'
