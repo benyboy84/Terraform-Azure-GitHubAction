@@ -37,6 +37,11 @@ on:
   pull_request_review:
     types: [submitted, dismissed]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   approved:
     name: Pull Request Approved
@@ -47,7 +52,6 @@ jobs:
       URL: ${{ github.event.pull_request.comments_url }}
       USER: ${{ github.event.review.user.login }}
     steps:
-
       - name: Add Pull Request Comment
         run: |
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
@@ -57,21 +61,31 @@ jobs:
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L "$URL" > /dev/null
 
-
   dismissed:
     name: Pull Request Dismissed
     if: ${{ github.event.review.state == 'dismissed' }}
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:          
       - name: Remove Pull Request Comment
         run: |
           echo "INFO     | Looking for an existing PR comment."
-          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
-          AUTH_HEADER="Authorization: token ${{ secrets.GITHUB_TOKEN }}"
-          PR_COMMENT_URI=$(${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
-          PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id')
-          if [ "$PR_COMMENT_ID" ]; then
-              echo "INFO     | Found existing PR comment: $PR_COMMENT_ID. Deleting."
-              PR_COMMENT_URL="$PR_COMMENT_URI/$PR_COMMENT_ID"
-              curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L "$PR_COMMENT_URL" 
-          fi
+          ACCEPT_HEADER="Accept: application/vnd.github+json"
+          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+          PR_COMMENT_URI=$(echo ${{ github.event.repository.comments_url }} | sed "s|{/number}||g")
+          PR_COMMENT_URI="${{ github.event.repository.comments_url }}" | sed "s|{/number}||g"
+          echo -e "$PR_COMMENT_URI"
+          curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id' | while read ID; do
+            echo "INFO     | Found existing PR comment: $ID. Deleting."
+            PR_COMMENT_URL="$PR_COMMENT_URI/$ID"
+            echo $PR_COMMENT_URL
+            curl -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "X-GitHub-Api-Version: 2022-11-28" "$PR_COMMENT_URL" 
+          done
+
+
+#          PR_COMMENT_ID=$(curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id')
+#          echo $PR_COMMENT_ID
+#          if [ "$PR_COMMENT_ID" ]; then
+#            for ID in "${PR_COMMENT_ID[@]}"
+#          fi
