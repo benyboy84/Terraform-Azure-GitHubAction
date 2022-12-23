@@ -54,13 +54,21 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.issue.number }}
+      - name: Find Branch
+        id: branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PULL_URL=${{ github.event.issue.pull_request.url }}
+          Accept_Header="Accept: application/vnd.github.v3+json"
+          Auth_Header="Authorization: token $GITHUB_TOKEN"
+          Branch=$(curl -sS -H "$Auth_Header" -H "$Accept_Header" -L $PULL_URL | jq -r ' .head.ref' )
+          echo "Branch=${Branch}" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.branch.putputs.Branch }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -100,4 +108,4 @@ jobs:
       - name: Delete Branch
         id: delete
         run: |
-          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
+          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ steps.branch.putputs.Branch }}
