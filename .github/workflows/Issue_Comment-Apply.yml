@@ -98,8 +98,6 @@ jobs:
           curl -sS -X PUT -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -d '{"commit_message":"Merge by GitHub Action"}' -L $URL
 
       - name: Delete Branch
-        id: merge
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: delete
         run: |
-          curl -s -X DELETE -u username:$GITHUB_TOKEN https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
+          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ github.head_ref }}
