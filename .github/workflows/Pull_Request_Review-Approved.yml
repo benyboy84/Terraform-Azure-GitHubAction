@@ -31,7 +31,7 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: Pull Request Approved - Issue_Comment
+name: Pull Request Approved
 
 on:
   pull_request_review:
@@ -50,7 +50,7 @@ jobs:
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
           CONTENT_HEADER="Content-Type: application/json"
-          PR_COMMENT="Approved by ${{ github.event.review.user.login }}"
+          PR_COMMENT="### Deployment reviewed by ${{ github.event.review.user.login }}"
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L ${{ github.event.pull_request.comments_url }} > /dev/null
 
@@ -67,9 +67,9 @@ jobs:
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
           PR_COMMENT_URI=$(echo ${{ github.event.pull_request.head.repo.issue_comment_url }} | sed "s|{/number}||g")
-          curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("Approved by")) | .id' | while read ID; do
+          curl -sS -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -L ${{ github.event.pull_request.comments_url }} | jq '.[] | select(.body|test ("### Deployment reviewed by")) | .id' | while read ID; do
             echo "INFO     | Found existing PR comment: $ID. Deleting."
             PR_COMMENT_URL="$PR_COMMENT_URI/$ID"
             echo $PR_COMMENT_URL
-            curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" "$PR_COMMENT_URL" 
+            curl -sS -X DELETE -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" "$PR_COMMENT_URL" > /dev/null
           done

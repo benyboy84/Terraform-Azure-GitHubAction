@@ -91,6 +91,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          URL="${{ github.event.isssue.pull_request.url}}\merge"
+          echo $URL
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-          curl -X PUT -H $ACCEPT_HEADER -H $AUTH_HEADER https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge -d '{"commit_title":"Merge by CICD"}'
+          curl -X PUT -H $ACCEPT_HEADER -H $AUTH_HEADER $URL -d '{"commit_title":"Merge by CICD"}'
