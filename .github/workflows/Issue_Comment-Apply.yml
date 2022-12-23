@@ -91,7 +91,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          URL="${{ github.event.issue.pull_request.url }}\merge"
+          URL="${{ github.event.issue.pull_request.url }}/merge"
           echo $URL
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
