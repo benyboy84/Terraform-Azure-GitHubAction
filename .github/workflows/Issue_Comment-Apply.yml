@@ -39,7 +39,7 @@ on:
 
 jobs:
   terraform-apply:
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'terraform apply') }}
+    if: ${{ !github.event.comment && github.event.issue.pull_request && contains(github.event.comment.body, 'terraform apply') }}
     name: Terraform Apply - Comment
     runs-on: ubuntu-latest
     env:
@@ -94,18 +94,18 @@ jobs:
 #          Github_Token: ${{ secrets.GITHUB_TOKEN }}
 #          Plan: terraform.tfplan
 
-      - name: Merge Pull Request
-        id: merge
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          URL="${{ github.event.issue.pull_request.url }}/merge"
-          echo $URL
-          ACCEPT_HEADER="Accept: application/vnd.github+json"
-          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-          curl -sS -X PUT -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -d '{"commit_message":"Merge by GitHub Action"}' -L $URL
+#      - name: Merge Pull Request
+#        id: merge
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          URL="${{ github.event.issue.pull_request.url }}/merge"
+#          echo $URL
+#          ACCEPT_HEADER="Accept: application/vnd.github+json"
+#          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+#          curl -sS -X PUT -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -d '{"commit_message":"Merge by GitHub Action"}' -L $URL
 
-      - name: Delete Branch
-        id: delete
-        run: |
-          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ steps.branch.outputs.Branch }}
+#      - name: Delete Branch
+#        id: delete
+#        run: |
+#          curl -s -X DELETE -u username:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${{ steps.branch.outputs.Branch }}
