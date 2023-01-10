@@ -86,4 +86,4 @@ jobs:
 
       - name: Terraform Validate
         id: validate
-        uses: benyboy84/GitHubAction_terraform-validate@v1.0.0
+        uses: benyboy84/GitHubAction_terraform-validate@v1
