@@ -96,7 +96,7 @@ jobs:
 
   terraform-plan:
     name: Terraform Plan
-    if: ${{ github.event.issue.pull_request || (!github.event.comment && github.event.issue.pull_request && contains(github.event.comment.body, 'terraform plan')) }}
+    if: ${{ github.event.pull_request || (!github.event.comment && github.event.issue.pull_request && contains(github.event.comment.body, 'terraform plan')) }}
     runs-on: ubuntu-latest
     needs: [terraform-fmt, terraform-validate]
     env:
