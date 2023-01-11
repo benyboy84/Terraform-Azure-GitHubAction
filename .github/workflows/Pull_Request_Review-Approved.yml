@@ -51,17 +51,22 @@ jobs:
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
           CONTENT_HEADER="Content-Type: application/json"
           CONTENT_HEADER="Content-Type: application/json"
-          PR_COMMENT='# Deployment reviewed by ${{ github.event.review.user.login }}\n
-          ## Instructions\n
+          PR_COMMENT='# Deployment reviewed by ${{ github.event.review.user.login }}
+
+          ## Instructions
           Before starting:
           - [ ] Validate that the change request is approved.
-          - [ ] You are in a maintenance period to deploy it.\n
-          ### Write \`terraform apply\` in a comment.\n
+          - [ ] You are in a maintenance period to deploy it.
+
+          ### Write \`terraform apply\` in a comment.
+
           This will start a workflow that will deploy the required changes to the infrastructure. 
-          The result will be displayed in a comment once the task is completed.\n
+          The result will be displayed in a comment once the task is completed.
+
           If the change is successful:
           - Merge will be done automatically into the `main` branch.
-          - Branch will be delete.\n
+          - Branch will be delete.
+          
           If the change is **NOT** successful:
           - Fix the code.
           - Push the code into the current branch.
