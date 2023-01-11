@@ -47,10 +47,9 @@ jobs:
   terraform-fmt:
     name: "Terraform Format"
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -58,13 +57,12 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: false
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Recursive: true
-          Comment: true
 
   terraform-validate:
     name: "Terraform Validate"
