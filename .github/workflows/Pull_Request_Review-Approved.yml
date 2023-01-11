@@ -50,9 +50,31 @@ jobs:
           ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
           AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
           CONTENT_HEADER="Content-Type: application/json"
-          PR_COMMENT="### Deployment reviewed by ${{ github.event.review.user.login }}"
+          CONTENT_HEADER="Content-Type: application/json"
+          PR_COMMENT='# Deployment reviewed by ${{ github.event.review.user.login }}\n
+          ## Instructions\n
+          Before starting:
+          - [ ] Validate that the change request is approved.
+          - [ ] You are in a maintenance period to deploy it.\n
+          ### Write \`terraform apply\` in a comment.\n
+          This will start a workflow that will deploy the required changes to the infrastructure. 
+          The result will be displayed in a comment once the task is completed.\n
+          If the change is successful:
+          - Merge will be done automatically into the `main` branch.
+          - Branch will be delete.\n
+          If the change is **NOT** successful:
+          - Fix the code.
+          - Push the code into the current branch.
+          - Validate the check status
+          - Ask for a review.'
           PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
           curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L ${{ github.event.pull_request.comments_url }} > /dev/null
+#          ACCEPT_HEADER="Accept: application/vnd.github.v3+json"
+#          AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+#          CONTENT_HEADER="Content-Type: application/json"
+#          PR_COMMENT="### Deployment reviewed by ${{ github.event.review.user.login }}"
+#          PR_PAYLOAD=$(echo '{}' | jq --arg body "$PR_COMMENT" '.body = $body')
+#          curl -sS -X POST -H "$AUTH_HEADER" -H "$ACCEPT_HEADER" -H "$CONTENT_HEADER" -d "$PR_PAYLOAD" -L ${{ github.event.pull_request.comments_url }} > /dev/null
 
   dismissed:
     name: Pull Request Dismissed
