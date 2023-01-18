@@ -64,7 +64,7 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
+        uses: benyboy84/GitHubAction_terraform-fmt@wip-refactor-comment
 
   terraform-validate:
     name: "Terraform Validate"
