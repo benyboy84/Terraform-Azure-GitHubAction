@@ -102,7 +102,7 @@ jobs:
           https://api.github.com/repos/benyboy84/Terraform-Azure-GitHubAction/branches/main/protection/required_status_checks
 
       - name: GraphQL
-        un: |
+        run: |
           curl -H "Authorization: bearer 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" -X POST -d " \
           { \
             \"query\": \"query { viewer { login }}\" \
