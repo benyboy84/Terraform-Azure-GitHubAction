@@ -103,7 +103,7 @@ jobs:
 
       - name: GraphQL
         run: |
-          curl -H "Authorization: bearer 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" -X POST -d " \
+          curl -H "Authorization: bearer $GITHUB_TOKEN" -X POST -d " \
           { \
             \"query\": \"query { viewer { login }}\" \
           } \
