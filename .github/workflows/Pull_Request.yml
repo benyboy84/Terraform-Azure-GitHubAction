@@ -43,14 +43,17 @@ on:
       - '**'        # matches every branch
       - '!master'   # excludes master
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   terraform-fmt:
     name: "Terraform Format"
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -58,13 +61,24 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
           terraform_wrapper: false
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Terraform Format
         id: fmt
-        uses: benyboy84/GitHubAction_terraform-fmt@v1.0.0
-        with:
-          Github_Token: ${{ secrets.GITHUB_TOKEN }}
-          Recursive: true
-          Comment: true
+        uses: benyboy84/GitHubAction_terraform-fmt@wip-refactor-comment
+
+  gitHub-context:
+    name: "Print GitHub context"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Print GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
 
   terraform-validate:
     name: "Terraform Validate"
@@ -76,11 +90,6 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}   # Can be configured in Terraform Cloud
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}               # Can be configured in Terraform Cloud
     steps:
-
-      - name: Print GitHub context
-        run: echo "$GITHUB_CONTEXT"
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -95,22 +104,6 @@ jobs:
         id: validate
         uses: benyboy84/GitHubAction_terraform-validate@v1
 
-#      - name: Validate Approved
-#        env:
-          #URL: ${{ github.event.pull_request._links.self }}
-          #URL: ${{ github.event.issue.pull_request.url }}
-#          PR_NUMBER: ${{ github.event.number }}
-#        run: |
-#          echo "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews"
-#          URL="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/branches/main/protection"
-#          echo $URL
-#          JSON=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" $URL )
-#          echo $JSON
-#          echo toJson(JSON)
-  
-
-
-
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
@@ -124,8 +117,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: azure
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
