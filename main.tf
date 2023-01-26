@@ -10,7 +10,7 @@ terraform {
     }
   }
   cloud {
-  organization = "ConseilsTI"
+    organization = "ConseilsTI"
 
     workspaces {
       name = "Azure"
