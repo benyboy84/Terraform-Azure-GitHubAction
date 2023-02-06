@@ -67,7 +67,8 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@wip-refactor-comment
-          with: ./modules
+        with: 
+          target: "./modules"
 
 
   print-github:
