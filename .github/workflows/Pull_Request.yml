@@ -68,7 +68,7 @@ jobs:
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@wip-refactor-comment
         with: 
-          target: "./modules"
+          recursive: "test"
 
 
   print-github:
