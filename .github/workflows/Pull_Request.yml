@@ -167,5 +167,3 @@ jobs:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
 
-
-
