@@ -43,9 +43,9 @@ on:
       - '**'        # matches every branch
       - '!master'   # excludes master
 
-permissions:
-  contents: read
-  pull-requests: write
+#permissions:
+#  contents: read
+#  pull-requests: write
 
 jobs:
   terraform-fmt:
@@ -66,19 +66,51 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: benyboy84/GitHubAction_terraform-fmt@wip-refactor-comment
+        uses: benyboy84/GitHubAction_terraform-fmt@ft_add-comment-input
+        with:
+          comment: true
 
-  gitHub-context:
-    name: "Print GitHub context"
+
+  print-github:
+    name: "Print GitHub"
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
-      - name: Print GitHub context
+      - name: Print GitHub Context
         run: echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
+      
+      - name: Print Branch Protection
+        run: |
+          curl -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/benyboy84/Terraform-Azure-GitHubAction/branches/main/protection
+
+      - name: Print Branch Protection Reviews
+        run: |
+          curl -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/benyboy84/Terraform-Azure-GitHubAction/branches/main/protection/required_pull_request_reviews
+
+      - name: Print Branch Protection Checks
+        run: |
+          curl -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/benyboy84/Terraform-Azure-GitHubAction/branches/main/protection/required_status_checks
+
+      - name: GraphQL
+        run: |
+          curl -H "Authorization: bearer $GITHUB_TOKEN" -X POST -d " \
+          { \
+            \"query\": \"query { viewer { login }}\" \
+          } \
+          " https://api.github.com/graphql
 
   terraform-validate:
     name: "Terraform Validate"
@@ -134,3 +166,4 @@ jobs:
         with:
           GitHub_Token: ${{ secrets.GITHUB_TOKEN }}
           Out: terraform.tfplan
+

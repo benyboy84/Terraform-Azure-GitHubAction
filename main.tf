@@ -1,9 +1,11 @@
+# Try to break status for pull request 2
+
 #############################################################################
-# TERRAFORM CONFIG 105
+# TERRAFORM CONFIG
 #############################################################################
 
 terraform {
-  required_providers {
+required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 2.0"
