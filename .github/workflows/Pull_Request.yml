@@ -67,6 +67,8 @@ jobs:
       - name: Terraform Format
         id: fmt
         uses: benyboy84/GitHubAction_terraform-fmt@ft_add-comment-input
+        with:
+          comment: true
 
 
   print-github:
